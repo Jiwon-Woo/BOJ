@@ -18,8 +18,6 @@ int solution(vector<int> queue1, vector<int> queue2) {
         return -1;
     }
     
-    long initial_sum1 = sum1;
-    long initial_sum2 = sum2;
     while (diff) {
         if (diff > 0) {
             int temp = dequeue1[0];
