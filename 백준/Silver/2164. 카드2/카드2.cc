@@ -15,13 +15,10 @@ int main() {
 		cards.push_back(i + 1);
 	}
 
-	int cnt = 0;
 	while (cards.size() > 1) {
-		if (cnt % 2) {
-			cards.push_back(cards.front());
-		}
+        cards.pop_front();
+        cards.push_back(cards.front());
 		cards.pop_front();
-		cnt++;
 	}
 	cout << cards.front();
 	return 0;
