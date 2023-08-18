@@ -1,33 +1,53 @@
 import sys
 
-n = int(sys.stdin.readline())
-qna_list = []
-for _ in range(n):
-    qna_list.append(list(map(int, sys.stdin.readline().split())))
+N = int(sys.stdin.readline())
+hint = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
+
+sys.setrecursionlimit(999999999)
 
 answer = 0
-for x in range(1, 10):
-    for y in range(1, 10):
-        for z in range(1, 10):
-            if x == y or y == z or x == z:
-                continue
-            same = 0
-            for qna in qna_list:
-                strike = 0
-                ball = 0
-                str_num = str(x * 100 + y * 10 + z)
-                str_q = str(qna[0])
-                for i in range(0, 3):
-                    for j in range(0, 3):
-                        if str_num[i] == str_q[j]:
-                            if i == j:
-                                strike += 1
-                            else:
-                                ball += 1
-                if strike != qna[1] or ball != qna[2]:
-                    break
-                same += 1
-            if same == len(qna_list):
-                answer += 1
 
+
+def calculate(number, hint_number, strike, ball):
+    str_number = str(number)
+    str_hint_number = str(hint_number)
+
+    if str_number[0] == '0' or str_number[1] == '0' or str_number[2] == '0':
+        return False
+    if str_number[0] == str_number[1] or str_number[1] == str_number[2] or str_number[2] == str_number[0]:
+        return False
+
+    for i in range(3):
+        for j in range(3):
+            if str_number[i] != str_hint_number[j]:
+                continue
+            if i == j:
+                strike -= 1
+            else:
+                ball -= 1
+
+    if strike == 0 and ball == 0:
+        return True
+    return False
+
+
+def recur(hint_idx, number):
+    global answer
+
+    if number == 1000:
+        return
+
+    if hint_idx == N:
+        answer += 1
+        recur(0, number + 1)
+        return
+
+    hint_number, strike, ball = hint[hint_idx]
+    if calculate(number, hint_number, strike, ball):
+        recur(hint_idx + 1, number)
+    else:
+        recur(0, number + 1)
+
+
+recur(0, 123)
 print(answer)
