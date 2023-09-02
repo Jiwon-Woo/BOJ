@@ -2,21 +2,23 @@ import sys
 
 N = int(sys.stdin.readline())
 interviews = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
-max_profit = 0
+dp = [-1 for _ in range(N + 1)]
 
 
-def recur(index, profit):
-    global interviews, max_profit
+def recur(index):
+    global interviews
 
+    if index > N:
+        return -15001
     if index == N:
-        max_profit = max(profit, max_profit)
-        return
+        return 0
+    if dp[index] > -1:
+        return dp[index]
 
     ti, pi = interviews[index]
-    if index + ti <= N:
-        recur(index + ti, profit + pi)
-    recur(index + 1, profit)
+    dp[index] = max(recur(index + ti) + pi, recur(index + 1))
+    return dp[index]
 
 
-recur(0, 0)
-print(max_profit)
+recur(0)
+print(dp[0])
