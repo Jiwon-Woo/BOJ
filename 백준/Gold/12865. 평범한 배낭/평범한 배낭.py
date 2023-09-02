@@ -1,14 +1,27 @@
 import sys
 
-nk = list(map(int, sys.stdin.readline().split()))
-wv = [list(map(int, sys.stdin.readline().split())) for _ in range(nk[0])]
-bag = [[0 for _ in range(nk[1] + 1)] for _ in range(nk[0] + 1)]
+N, K = map(int, sys.stdin.readline().split())
+items = [list(map(int, sys.stdin.readline().split())) for _ in range(N)]
+dp = [[-1 for _ in range(K + 1)] for _ in range(N)]
 
-for i in range(nk[0]):
-	for j in range(1, nk[1] + 1):
-		if j < wv[i][0]:
-			bag[i + 1][j] = bag[i][j]
-		else:
-			bag[i + 1][j] = max(bag[i][j], bag[i][j - wv[i][0]] + wv[i][1])
 
-print(bag[nk[0]][nk[1]])
+def recur(index, weight):
+    global items, dp
+
+    if weight > K:
+        return -100001
+    if index == N:
+        return 0
+    if dp[index][weight] > -1:
+        return dp[index][weight]
+
+    w, v = items[index]
+    dp[index][weight] = max(recur(index + 1, weight + w) + v, recur(index + 1, weight))
+    return dp[index][weight]
+
+
+recur(0, 0)
+max_value = 0
+for idx in dp:
+    max_value = max(max_value, max(idx))
+print(max_value)
