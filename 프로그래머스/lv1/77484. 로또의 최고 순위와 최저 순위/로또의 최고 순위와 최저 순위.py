@@ -1,11 +1,9 @@
 def solution(lottos, win_nums):
-    lottos.sort()
-    lottos.reverse()
     zero = lottos.count(0)
     match = 0
     
-    for i in range(len(lottos) - zero):
-        if lottos[i] in win_nums:
+    for i in range(len(lottos)):
+        if (lottos[i] != 0) and (lottos[i] in win_nums):
             match += 1
     
     high = 7 - (match + zero) if 7 - (match + zero) < 7 else 6
